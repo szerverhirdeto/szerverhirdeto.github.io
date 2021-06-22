@@ -78,8 +78,33 @@ function checkCookie() {
   <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
   <strong>Fontos!</strong>Mi ez?
 </div>
-<meta name="viewport" content="width=device-width; height=device-height;"><link rel="stylesheet" href="resource://content-accessible/TopLevelVideoDocument.css"><link rel="stylesheet" href="chrome://global/skin/media/TopLevelVideoDocument.css"><script type="text/javascript" src="chrome://global/content/TopLevelVideoDocument.js"></script><title>tessék.mp4</title>
+ev => {
+  // Maximize the standalone video when pressing F11,
+  // but ignore audio elements
+  if (
+    ev.key == "F11" &&
+    videoElement.videoWidth != 0 &&
+    videoElement.videoHeight != 0
+  ) {
+    // If we're in browser fullscreen mode, it means the user pressed F11
+    // while browser chrome or another tab had focus.
+    // Don't break leaving that mode, so do nothing here.
+    if (window.fullScreen) {
+      return;
+    }
 
+    // If we're not in browser fullscreen mode, prevent entering into that,
+    // so we don't end up there after pressing Esc.
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    if (!document.fullscreenElement) {
+      videoElement.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }
+}
 </body>
 </html>
 
@@ -88,4 +113,5 @@ function checkCookie() {
 <video autoplay="yes" controls=""></video>
 </html>
 
- 
+ <meta name="viewport" content="width=device-width; height=device-height;"><link rel="stylesheet" href="resource://content-accessible/TopLevelVideoDocument.css"><link rel="stylesheet" href="chrome://global/skin/media/TopLevelVideoDocument.css"><script type="text/javascript" src="chrome://global/content/TopLevelVideoDocument.js"></script><title>tessék.mp4</title>
+
